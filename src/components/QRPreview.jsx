@@ -5,6 +5,7 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import useQRGenerator from '../hooks/useQRGenerator'
+import QRExpanded from './QRExpanded'
 
 function QRPreview({ value, customization, contrast }) {
   const containerRef = useRef(null)
@@ -16,6 +17,7 @@ function QRPreview({ value, customization, contrast }) {
 
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
+  const [expanded, setExpanded] = useState(false)
 
   // Montar la instancia de preview en el contenedor.
   useEffect(() => {
@@ -52,12 +54,26 @@ function QRPreview({ value, customization, contrast }) {
     <div className="qr-preview">
       <div className="qr-preview__stage" aria-live="polite">
         <span key={glowKey} className="qr-preview__glow" aria-hidden="true" />
-        <div
-          ref={containerRef}
-          className="qr-preview__canvas"
-          role="img"
-          aria-label="Vista previa del código QR"
-        />
+        <button
+          type="button"
+          className="qr-preview__canvas-btn"
+          onClick={() => hasValue && setExpanded(true)}
+          disabled={!hasValue}
+          aria-label="Ampliar el código QR para proyectarlo"
+          title="Click para ampliar"
+        >
+          <div
+            ref={containerRef}
+            className="qr-preview__canvas"
+            role="img"
+            aria-label="Vista previa del código QR"
+          />
+          {hasValue && (
+            <span className="qr-preview__expand-hint" aria-hidden="true">
+              ⤢ Ampliar
+            </span>
+          )}
+        </button>
         {!hasValue && (
           <div className="qr-preview__empty">
             Completa el formulario para generar tu QR
@@ -100,6 +116,14 @@ function QRPreview({ value, customization, contrast }) {
       </div>
 
       {error && <p className="qr-preview__error">{error}</p>}
+
+      {expanded && hasValue && (
+        <QRExpanded
+          value={value}
+          customization={customization}
+          onClose={() => setExpanded(false)}
+        />
+      )}
     </div>
   )
 }
