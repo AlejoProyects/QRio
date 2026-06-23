@@ -4,6 +4,7 @@
  * o que alguien lo escanee directamente desde la pantalla.
  */
 import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import useQRGenerator from '../hooks/useQRGenerator'
 
 function QRExpanded({ value, customization, onClose }) {
@@ -33,7 +34,7 @@ function QRExpanded({ value, customization, onClose }) {
     }
   }, [onClose])
 
-  return (
+  return createPortal(
     <div
       className="qr-lightbox"
       role="dialog"
@@ -55,7 +56,8 @@ function QRExpanded({ value, customization, onClose }) {
         <div ref={containerRef} className="qr-lightbox__canvas" />
         {value && <p className="qr-lightbox__value">{value}</p>}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
 
