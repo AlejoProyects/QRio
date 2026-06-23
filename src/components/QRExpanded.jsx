@@ -50,16 +50,11 @@ function QRExpanded({ value, customization, onClose }) {
         ✕
       </button>
 
-      {/* stopPropagation: clicks sobre el QR no cierran el modal */}
-      <div
-        className="qr-lightbox__plate"
-        onClick={(e) => e.stopPropagation()}
-        style={{ background: customization.backgroundColor }}
-      >
+      {/* stopPropagation: clicks sobre la tarjeta no cierran el modal */}
+      <div className="qr-lightbox__card" onClick={(e) => e.stopPropagation()}>
         <div ref={containerRef} className="qr-lightbox__canvas" />
+        {value && <p className="qr-lightbox__value">{value}</p>}
       </div>
-
-      <p className="qr-lightbox__hint">Toca fuera o pulsa Esc para cerrar</p>
     </div>
   )
 }
